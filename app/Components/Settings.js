@@ -35,6 +35,7 @@ const Settings = () => {
         onChangeText={(text) => setPassword(text)}
         value={password}
         textContentType="password"
+        secureTextEntry={true}
       />
       <TouchableHighlight
         style={{ ...styles.openButton, backgroundColor: "#2196F3" }}

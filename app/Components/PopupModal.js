@@ -24,6 +24,7 @@ const PopupModal = ({
 }) => {
   const [selectedUnit, setSelectedUnit] = useState(unit[0]);
   const [selectedQuantity, setSelectedQuantity] = useState(parseInt(quantity));
+  let disabled = selectedQuantity <= 0;
   let items = unit.map((s, i) => {
     return <Picker.Item key={i} value={s} label={s} />;
   });
@@ -54,18 +55,31 @@ const PopupModal = ({
         <Text style={styles.modalText}>Code : {code}</Text>
         <Text style={styles.modalText}>Name : {name}</Text>
         <Text style={styles.modalText}>Price : {price}</Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.modalText}>Quantity : {selectedQuantity}</Text>
+        <View style={styles.counter}>
+          <Text style={[styles.modalText]}>Quantity : </Text>
+          <Button
+            title="-"
+            disabled={disabled}
+            onPress={() => {
+              setSelectedQuantity(
+                selectedQuantity > 0 ? selectedQuantity - 1 : 0
+              );
+            }}
+          />
+          <TextInput
+            style={styles.counterValue}
+            value={selectedQuantity && selectedQuantity.toString()}
+            onChangeText={(x) => setSelectedQuantity(parseInt(x))}
+            keyboardType={"number-pad"}
+            maxLength={3}
+            onBlur={() => !selectedQuantity && setSelectedQuantity(0)}
+          />
           <Button
             title="+"
             onPress={() => setSelectedQuantity(selectedQuantity + 1)}
-            style={{}}
-          />
-          <Button
-            title="-"
-            onPress={() => setSelectedQuantity(selectedQuantity - 1)}
           />
         </View>
+
         <Picker
           style={{ width: 200, height: 44 }}
           itemStyle={{ height: 44 }}
@@ -137,5 +151,15 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  counter: {
+    flexDirection: "row",
+    alignSelf: "center",
+    padding: 10,
+  },
+  counterValue: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    fontSize: 18,
   },
 });

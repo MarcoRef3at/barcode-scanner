@@ -19,7 +19,12 @@ export default function Scanner() {
   const [api, setApi] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+
   const [code, setCode] = useState(null);
+  const [itm, setItm] = useState("");
+  const [unt, setUnt] = useState([]);
+  const [prc, setPrc] = useState(0);
+  const [qty, setQty] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -47,6 +52,10 @@ export default function Scanner() {
     setScanned(true);
     ApiRequest(api, postbody).then((res) => {
       console.log("res:", res.data);
+      setItm(res.data.Itm);
+      setUnt(res.data.Unt);
+      setPrc(res.data.Prc);
+      setQty(res.data.Qty);
       setScanned(false);
       setModalVisible(true);
     });
@@ -68,10 +77,10 @@ export default function Scanner() {
         modalVisible={modalVisible}
         setModalVisible={(x) => setModalVisible(x)}
         code={code}
-        name={"Item Name"}
-        quantity={"3"}
-        price={"20"}
-        unit={["kg", "gm", "mg"]}
+        name={itm}
+        quantity={qty}
+        price={prc}
+        unit={unt}
         password={password}
         api={api}
       />

@@ -8,11 +8,15 @@ import {
   View,
   TextInput,
   TouchableHighlight,
+  Dimensions,
+  Image,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiRequest from "./../api/request";
 import PopupModal from "./PopupModal";
+const { width } = Dimensions.get("screen");
+const qrSize = width * 0.9;
 export default function Scanner() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -110,11 +114,23 @@ export default function Scanner() {
     return <Text>No access to camera</Text>;
   }
   return (
-    <>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "flex-end",
+      }}
+    >
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
+        onBarCodeRead={scanned ? undefined : handleBarCodeScanned}
+        style={[StyleSheet.absoluteFill, styles.container]}
+      >
+        <Text style={styles.description}>Scan your code</Text>
+        <Image
+          style={styles.qr}
+          source={require("../../assets/qr-scanner.png")}
+        />
+      </BarCodeScanner>
       <PopupModal
         modalVisible={modalVisible}
         setModalVisible={(x) => setModalVisible(x)}
@@ -126,6 +142,34 @@ export default function Scanner() {
         password={password}
         api={api}
       />
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ecf0f1",
+  },
+  qr: {
+    marginTop: "20%",
+    marginBottom: "20%",
+    width: qrSize,
+    height: qrSize,
+  },
+  description: {
+    fontSize: width * 0.09,
+    marginTop: "10%",
+    textAlign: "center",
+    width: "70%",
+    color: "white",
+  },
+  cancel: {
+    fontSize: width * 0.05,
+    textAlign: "center",
+    width: "70%",
+    color: "white",
+  },
+});

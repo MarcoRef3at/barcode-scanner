@@ -43,6 +43,7 @@ export default function Scanner() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     Vibration.vibrate(30);
+
     setCode(data);
     let postbody = {
       pss: password,
@@ -50,15 +51,56 @@ export default function Scanner() {
     };
     postbody = JSON.stringify(postbody);
     setScanned(true);
-    ApiRequest(api, postbody).then((res) => {
-      console.log("res:", res.data);
-      setItm(res.data.Itm);
-      setUnt(res.data.Unt);
-      setPrc(res.data.Prc);
-      setQty(res.data.Qty);
-      setScanned(false);
-      setModalVisible(true);
-    });
+    if (!api) {
+      Alert.alert(
+        "NO API FOUND",
+        "",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setScanned(false);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      if (!password) {
+        console.log("password:", password);
+        Alert.alert(
+          "NO PASSWORD FOUND",
+          "",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setScanned(false);
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        ApiRequest(api, postbody)
+          .then((res) => {
+            console.log("api:", api);
+            console.log("res:", res.data);
+            if (res.data) {
+              setItm(res.data.Itm);
+              setUnt(res.data.Unt);
+              setPrc(res.data.Prc);
+              setQty(res.data.Qty);
+            }
+            setScanned(false);
+            setModalVisible(true);
+          })
+          .catch((err) => {
+            Alert.alert("Connection Error", ``);
+            setScanned(false);
+          });
+      }
+    }
   };
 
   if (hasPermission === null) {

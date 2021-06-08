@@ -14,16 +14,16 @@ import ApiRequest from "./../api/request";
 const PopupModal = ({
   modalVisible,
   setModalVisible,
-  code,
-  name,
-  unit,
-  price,
-  quantity,
+  code = "No Code",
+  name = "No Name",
+  unit = [],
+  price = -1,
+  quantity = "0",
   password,
   api,
 }) => {
   const [selectedUnit, setSelectedUnit] = useState(unit[0]);
-  const [selectedQuantity, setSelectedQuantity] = useState(parseInt(quantity));
+  const [selectedQuantity, setSelectedQuantity] = useState(quantity);
   let disabled = selectedQuantity <= 0;
   let items = unit.map((s, i) => {
     return <Picker.Item key={i} value={s} label={s} />;
@@ -68,8 +68,12 @@ const PopupModal = ({
           />
           <TextInput
             style={styles.counterValue}
-            value={selectedQuantity && selectedQuantity.toString()}
-            onChangeText={(x) => setSelectedQuantity(parseInt(x))}
+            value={selectedQuantity ? selectedQuantity.toString() : ""}
+            onChangeText={(x) =>
+              typeof x == "string"
+                ? setSelectedQuantity(parseInt(x))
+                : setSelectedQuantity(x)
+            }
             keyboardType={"number-pad"}
             maxLength={3}
             onBlur={() => !selectedQuantity && setSelectedQuantity(0)}

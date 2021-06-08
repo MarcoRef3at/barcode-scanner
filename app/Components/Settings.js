@@ -9,7 +9,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Settings = () => {
-  const [api, setApi] = useState("https://postman-echo.com/post");
+  const [api, setApi] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {

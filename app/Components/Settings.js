@@ -7,6 +7,8 @@ import {
   View,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppTextInput from "./Shared/TextInput";
+import AppButton from "./Shared/Button";
 
 const Settings = ({ navigation: { goBack, navigate } }) => {
   const [api, setApi] = useState("");
@@ -23,33 +25,31 @@ const Settings = ({ navigation: { goBack, navigate } }) => {
   }, []);
   return (
     <View style={styles.modalView}>
-      <Text style={styles.modalText}>Enter the API</Text>
-      <TextInput
-        style={{ width: 350, borderColor: "gray", borderWidth: 1 }}
+      <AppTextInput
+        placeholder="Enter the API"
         onChangeText={(text) => setApi(text)}
         value={api}
       />
-      <Text style={styles.modalText}>Enter your Password</Text>
-      <TextInput
-        style={{ width: 350, borderColor: "gray", borderWidth: 1 }}
+
+      <AppTextInput
+        placeholder="Enter your Password"
         onChangeText={(text) => setPassword(text)}
         value={password}
         textContentType="password"
-        secureTextEntry={true}
+        secureTextEntry
+        autoCapitalize="none"
+        autoCorrect={false}
       />
 
-      <TouchableHighlight
-        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+      <AppButton
+        title="Save"
         onPress={() => {
           AsyncStorage.setItem("api", api);
           AsyncStorage.setItem("pass", password).then(() => {
-            // goBack();
             navigate("Scanner");
           });
         }}
-      >
-        <Text style={styles.textStyle}>Save</Text>
-      </TouchableHighlight>
+      />
     </View>
   );
 };
@@ -58,10 +58,11 @@ export default Settings;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#f8f4f4",
+    borderRadius: 25,
+    flexDirection: "row",
+    padding: 15,
+    marginVertical: 10,
   },
   centeredView: {
     flex: 1,
@@ -100,7 +101,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+    color: "#0c0c0c",
+    fontSize: 18,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    justifyContent: "center",
+  },
+  textInput: {
+    color: "#0c0c0c",
+    fontSize: 18,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    justifyContent: "center",
   },
 });

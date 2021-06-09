@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import { Modal, StyleSheet, TextInput, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import ApiRequest from "./../api/request";
+import AppText from "./Shared/Text";
+import AppButton from "./Shared/Button";
+import RoundButton from "./Shared/RoundButton";
 
 const PopupModal = ({
   modalVisible,
@@ -52,13 +47,14 @@ const PopupModal = ({
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.modalText}>Code : {code}</Text>
-        <Text style={styles.modalText}>Name : {name}</Text>
-        <Text style={styles.modalText}>Price : {price}</Text>
+        <AppText style={styles.modalText}>Code : {code}</AppText>
+        <AppText style={styles.modalText}>Name : {name}</AppText>
+        <AppText style={styles.modalText}>Price : {price}</AppText>
+
         <View style={styles.counter}>
-          <Text style={[styles.modalText]}>Quantity : </Text>
-          <Button
-            title="-"
+          <AppText style={[styles.modalText]}>Quantity : </AppText>
+          <RoundButton
+            icon="minus-circle"
             disabled={disabled}
             onPress={() => {
               setSelectedQuantity(
@@ -66,6 +62,7 @@ const PopupModal = ({
               );
             }}
           />
+
           <TextInput
             style={styles.counterValue}
             value={selectedQuantity ? selectedQuantity.toString() : ""}
@@ -78,8 +75,9 @@ const PopupModal = ({
             maxLength={3}
             onBlur={() => !selectedQuantity && setSelectedQuantity(0)}
           />
-          <Button
-            title="+"
+
+          <RoundButton
+            icon="plus-circle"
             onPress={() => setSelectedQuantity(selectedQuantity + 1)}
           />
         </View>
@@ -93,12 +91,7 @@ const PopupModal = ({
           {items}
         </Picker>
 
-        <TouchableHighlight
-          style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-          onPress={() => submitRequest()}
-        >
-          <Text style={styles.textStyle}>Save</Text>
-        </TouchableHighlight>
+        <AppButton title="Save" onPress={() => submitRequest()} />
       </View>
     </Modal>
   );

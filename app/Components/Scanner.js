@@ -35,8 +35,6 @@ export default function Scanner({ navigation: { navigate } }) {
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
-        console.log("password:", password);
-        console.log("recordedPassword:", await AsyncStorage.getItem("pass"));
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         setHasPermission(status === "granted");
 

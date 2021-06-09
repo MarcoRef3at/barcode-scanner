@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, TextInput, View } from "react-native";
+import { Modal, StyleSheet, TextInput, ToastAndroid, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import ApiRequest from "./../api/request";
 import AppText from "./Shared/Text";
@@ -31,10 +31,19 @@ const PopupModal = ({
       Qty: selectedQuantity,
     };
     postbody = JSON.stringify(postbody);
-    ApiRequest(api, postbody).then((res) => {
-      console.log("res:", res.data);
-      setModalVisible(false);
-    });
+    ApiRequest(api, postbody)
+      .then((res) => {
+        console.log("res:", res.data);
+        setModalVisible(false);
+      })
+      .catch((err) => {
+        setTimeout(() => {
+          Platform.OS === "ios"
+            ? Alert.alert("Connection Error", ``)
+            : ToastAndroid.show("Connection Error!", ToastAndroid.SHORT);
+        }, 500);
+        setModalVisible(false);
+      });
   };
 
   return (

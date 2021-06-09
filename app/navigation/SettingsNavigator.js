@@ -5,7 +5,7 @@ import Settings from "./../Components/Settings";
 const Stack = createStackNavigator();
 const SettingsNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }}>
-    <Stack.Screen name="Scanner" component={Settings} />
+    <Stack.Screen name="Settings" component={Settings} />
   </Stack.Navigator>
 );
 

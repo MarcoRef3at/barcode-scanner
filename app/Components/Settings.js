@@ -8,17 +8,17 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Settings = () => {
+const Settings = ({ navigation: { goBack, navigate } }) => {
   const [api, setApi] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     (async () => {
       const recordedApi = await AsyncStorage.getItem("api");
-      console.log("recordedApi:", recordedApi);
-      if (recordedApi) {
-        setApi(recordedApi);
-      }
+      recordedApi && setApi(recordedApi);
+
+      const recordedPassword = await AsyncStorage.getItem("pass");
+      recordedPassword && setPassword(recordedPassword);
     })();
   }, []);
   return (
@@ -37,11 +37,15 @@ const Settings = () => {
         textContentType="password"
         secureTextEntry={true}
       />
+
       <TouchableHighlight
         style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
         onPress={() => {
           AsyncStorage.setItem("api", api);
-          AsyncStorage.setItem("pass", password);
+          AsyncStorage.setItem("pass", password).then(() => {
+            // goBack();
+            navigate("Scanner");
+          });
         }}
       >
         <Text style={styles.textStyle}>Save</Text>
@@ -81,6 +85,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   openButton: {
+    position: "absolute",
+    bottom: 20,
     backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 10,

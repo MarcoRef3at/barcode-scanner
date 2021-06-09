@@ -4,7 +4,10 @@ import Scanner from "../Components/Scanner";
 
 const Stack = createStackNavigator();
 const ScannerNavigator = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator
+    name="ScannerNavigator"
+    screenOptions={{ headerShown: false }}
+  >
     <Stack.Screen name="Scanner" component={Scanner} />
   </Stack.Navigator>
 );

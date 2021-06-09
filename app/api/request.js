@@ -10,7 +10,7 @@ const ApiRequest = (api, body) => {
         // console.log("success", request.responseText);
         resolve(JSON.parse(request.responseText));
       } else {
-        console.log("error", request);
+        // console.log("error", request);
         reject(request);
       }
     };

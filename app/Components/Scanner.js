@@ -10,14 +10,16 @@ import {
   TouchableHighlight,
   Dimensions,
   Image,
+  ToastAndroid,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiRequest from "./../api/request";
 import PopupModal from "./PopupModal";
 const { width } = Dimensions.get("screen");
 const qrSize = width * 0.9;
-export default function Scanner() {
+export default function Scanner({ navigation: { navigate } }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [api, setApi] = useState("");
@@ -30,24 +32,27 @@ export default function Scanner() {
   const [prc, setPrc] = useState(0);
   const [qty, setQty] = useState(0);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-      const recordedApi = await AsyncStorage.getItem("api");
-      if (recordedApi) {
-        setApi(recordedApi);
-      }
-      const recordedPassword = await AsyncStorage.getItem("pass");
-      if (recordedPassword) {
-        setPassword(recordedPassword);
-      }
-    })();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        console.log("password:", password);
+        console.log("recordedPassword:", await AsyncStorage.getItem("pass"));
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        setHasPermission(status === "granted");
+
+        const recordedApi = await AsyncStorage.getItem("api");
+        recordedApi ? setApi(recordedApi) : setApi("");
+
+        const recordedPassword = await AsyncStorage.getItem("pass");
+        recordedPassword ? setPassword(recordedPassword) : setPassword("");
+      })();
+    }, [])
+  );
 
   const handleBarCodeScanned = ({ type, data }) => {
     Vibration.vibrate(30);
-
+    console.log("api:", api);
+    console.log("password:", password);
     setCode(data);
     let postbody = {
       pss: password,
@@ -61,9 +66,10 @@ export default function Scanner() {
         "",
         [
           {
-            text: "OK",
+            text: "Go To Settings",
             onPress: () => {
               setScanned(false);
+              navigate("Settings");
             },
           },
         ],
@@ -77,9 +83,10 @@ export default function Scanner() {
           "",
           [
             {
-              text: "OK",
+              text: "Go To Settings",
               onPress: () => {
                 setScanned(false);
+                navigate("Settings");
               },
             },
           ],
@@ -88,8 +95,6 @@ export default function Scanner() {
       } else {
         ApiRequest(api, postbody)
           .then((res) => {
-            console.log("api:", api);
-            console.log("res:", res.data);
             if (res.data) {
               setItm(res.data.Itm);
               setUnt(res.data.Unt);
@@ -100,8 +105,12 @@ export default function Scanner() {
             setModalVisible(true);
           })
           .catch((err) => {
-            Alert.alert("Connection Error", ``);
-            setScanned(false);
+            setTimeout(() => {
+              Platform.OS === "ios"
+                ? Alert.alert("Connection Error", ``)
+                : ToastAndroid.show("Connection Error!", ToastAndroid.SHORT);
+              setScanned(false);
+            }, 500);
           });
       }
     }
@@ -122,7 +131,7 @@ export default function Scanner() {
       }}
     >
       <BarCodeScanner
-        onBarCodeRead={scanned ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFill, styles.container]}
       >
         <Text style={styles.description}>Scan your code</Text>

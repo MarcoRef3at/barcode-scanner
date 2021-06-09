@@ -7,10 +7,8 @@ const ApiRequest = (api, body) => {
       }
 
       if (request.status === 200) {
-        // console.log("success", request.responseText);
         resolve(JSON.parse(request.responseText));
       } else {
-        // console.log("error", request);
         reject(request);
       }
     };

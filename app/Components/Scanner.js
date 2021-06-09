@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   StyleSheet,
   Alert,
   Vibration,
-  Modal,
   View,
-  TextInput,
-  TouchableHighlight,
   Dimensions,
   Image,
   ToastAndroid,
@@ -15,6 +12,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import ApiRequest from "./../api/request";
 import PopupModal from "./PopupModal";
 const { width } = Dimensions.get("screen");
@@ -35,6 +33,7 @@ export default function Scanner({ navigation: { navigate } }) {
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
+        setScanned(false);
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         setHasPermission(status === "granted");
 
@@ -49,8 +48,6 @@ export default function Scanner({ navigation: { navigate } }) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     Vibration.vibrate(30);
-    console.log("api:", api);
-    console.log("password:", password);
     setCode(data);
     let postbody = {
       pss: password,
@@ -75,7 +72,6 @@ export default function Scanner({ navigation: { navigate } }) {
       );
     } else {
       if (!password) {
-        console.log("password:", password);
         Alert.alert(
           "NO PASSWORD FOUND",
           "",
@@ -138,6 +134,7 @@ export default function Scanner({ navigation: { navigate } }) {
           source={require("../../assets/qr-scanner.png")}
         />
       </BarCodeScanner>
+
       <PopupModal
         modalVisible={modalVisible}
         setModalVisible={(x) => setModalVisible(x)}

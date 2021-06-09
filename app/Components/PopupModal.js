@@ -33,7 +33,6 @@ const PopupModal = ({
     postbody = JSON.stringify(postbody);
     ApiRequest(api, postbody)
       .then((res) => {
-        console.log("res:", res.data);
         setModalVisible(false);
       })
       .catch((err) => {

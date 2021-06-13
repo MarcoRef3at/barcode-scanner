@@ -12,6 +12,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BarcodeMask from "react-native-barcode-mask";
 
 import ApiRequest from "./../api/request";
 import PopupModal from "./PopupModal";
@@ -129,9 +130,17 @@ export default function Scanner({ navigation: { navigate } }) {
         style={[StyleSheet.absoluteFill, styles.container]}
       >
         <Text style={styles.description}>Scan your code</Text>
-        <Image
-          style={styles.qr}
-          source={require("../../assets/qr-scanner.png")}
+        <BarcodeMask
+          width={300}
+          height={500}
+          outerMaskOpacity={0.8}
+          lineAnimationDuration={1500}
+          edgeRadius={5}
+          edgeBorderWidth={5}
+          edgeColor={"white"}
+          edgeHeight={20}
+          animatedLineColor={"red"}
+          animatedLineHeight={2}
         />
       </BarCodeScanner>
 
@@ -165,10 +174,11 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: width * 0.09,
-    marginTop: "10%",
     textAlign: "center",
     width: "70%",
     color: "white",
+    position: "absolute",
+    top: 25,
   },
   cancel: {
     fontSize: width * 0.05,

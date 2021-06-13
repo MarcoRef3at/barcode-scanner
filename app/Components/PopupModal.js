@@ -100,6 +100,11 @@ const PopupModal = ({
         </Picker>
 
         <AppButton title="Save" onPress={() => submitRequest()} />
+        <AppButton
+          title="Cancel"
+          onPress={() => setModalVisible(false)}
+          style={{ backgroundColor: "lightgrey" }}
+        />
       </View>
     </Modal>
   );
@@ -121,16 +126,18 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
-    top: "30%",
-    left: "30%",
-    right: "30%",
-
-    margin: -40,
+    top: "10%",
+    left: "15%",
+    right: "15%",
+    bottom: "20%",
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -6,22 +6,19 @@ import {
   Vibration,
   View,
   Dimensions,
-  Image,
   ToastAndroid,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BarcodeMask from "react-native-barcode-mask";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import ApiRequest from "./../api/request";
-import PopupModal from "./PopupModal";
-import AppTextInput from "./Shared/TextInput";
-import RoundButton from "./Shared/RoundButton";
 import CodeManualInput from "./Shared/CodeManualInput";
+import PopupModal from "./PopupModal";
+
 const { width } = Dimensions.get("screen");
-const qrSize = width * 0.9;
+
 export default function Scanner({ navigation: { navigate } }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -59,7 +56,7 @@ export default function Scanner({ navigation: { navigate } }) {
       Cd: data,
     };
     postbody = JSON.stringify(postbody);
-    setScanned(true);
+    setScanned(true); //stop scanning
     if (!api) {
       Alert.alert(
         "NO API FOUND",
@@ -68,7 +65,7 @@ export default function Scanner({ navigation: { navigate } }) {
           {
             text: "Go To Settings",
             onPress: () => {
-              setScanned(false);
+              setScanned(false); //start scanning
               navigate("Settings");
             },
           },
@@ -122,13 +119,7 @@ export default function Scanner({ navigation: { navigate } }) {
     return <Text>No access to camera</Text>;
   }
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "flex-end",
-      }}
-    >
+    <View style={styles.mainContainer}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFill, styles.container]}
@@ -169,18 +160,18 @@ export default function Scanner({ navigation: { navigate } }) {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ecf0f1",
   },
-  qr: {
-    marginTop: "20%",
-    marginBottom: "20%",
-    width: qrSize,
-    height: qrSize,
-  },
+
   description: {
     fontSize: width * 0.09,
     textAlign: "center",
@@ -188,11 +179,5 @@ const styles = StyleSheet.create({
     color: "white",
     position: "absolute",
     top: 25,
-  },
-  cancel: {
-    fontSize: width * 0.05,
-    textAlign: "center",
-    width: "70%",
-    color: "white",
   },
 });

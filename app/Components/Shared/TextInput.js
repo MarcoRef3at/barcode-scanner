@@ -1,7 +1,7 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
-function AppTextInput({ icon, width = "100%", ...otherProps }) {
+function AppTextInput({ children, icon, width = "100%", ...otherProps }) {
   return (
     <View style={[styles.container, { width }]}>
       <TextInput
@@ -9,6 +9,7 @@ function AppTextInput({ icon, width = "100%", ...otherProps }) {
         style={styles.textInput}
         {...otherProps}
       />
+      {children}
     </View>
   );
 }

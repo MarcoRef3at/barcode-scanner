@@ -13,9 +13,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BarcodeMask from "react-native-barcode-mask";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import ApiRequest from "./../api/request";
 import PopupModal from "./PopupModal";
+import AppTextInput from "./Shared/TextInput";
+import RoundButton from "./Shared/RoundButton";
+import CodeManualInput from "./Shared/CodeManualInput";
 const { width } = Dimensions.get("screen");
 const qrSize = width * 0.9;
 export default function Scanner({ navigation: { navigate } }) {
@@ -141,6 +145,11 @@ export default function Scanner({ navigation: { navigate } }) {
           edgeHeight={20}
           animatedLineColor={"red"}
           animatedLineHeight={2}
+        />
+        <CodeManualInput
+          code={code}
+          setCode={(x) => setCode(x)}
+          handleBarCodeScanned={(x, y) => handleBarCodeScanned(x, y)}
         />
       </BarCodeScanner>
 

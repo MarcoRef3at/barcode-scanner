@@ -129,13 +129,11 @@ export default function Scanner({ navigation: { navigate } }) {
           width={300}
           height={500}
           outerMaskOpacity={0.8}
-          lineAnimationDuration={1500}
           edgeRadius={5}
           edgeBorderWidth={5}
           edgeColor={"white"}
           edgeHeight={20}
-          animatedLineColor={"red"}
-          animatedLineHeight={2}
+          showAnimatedLine={false}
         />
         <CodeManualInput
           code={code}

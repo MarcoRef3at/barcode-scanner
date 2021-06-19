@@ -20,7 +20,7 @@ const PopupModal = ({
   const [selectedUnit, setSelectedUnit] = useState(unit[0]);
   const [selectedQuantity, setSelectedQuantity] = useState(quantity);
   let disabled = selectedQuantity <= 0;
-  let items = unit.map((s, i) => {
+  let unitItems = unit.map((s, i) => {
     return <Picker.Item key={i} value={s} label={s} />;
   });
 
@@ -59,8 +59,8 @@ const PopupModal = ({
         <AppText style={styles.modalText}>Name : {name}</AppText>
         <AppText style={styles.modalText}>Price : {price}</AppText>
 
+        <AppText style={[styles.modalText]}>Quantity : </AppText>
         <View style={styles.counter}>
-          <AppText style={[styles.modalText]}>Quantity : </AppText>
           <RoundButton
             icon="minus-circle"
             disabled={disabled}
@@ -89,15 +89,20 @@ const PopupModal = ({
             onPress={() => setSelectedQuantity(selectedQuantity + 1)}
           />
         </View>
-
-        <Picker
-          style={{ width: 200, height: 44 }}
-          itemStyle={{ height: 44 }}
-          selectedValue={selectedUnit}
-          onValueChange={(itemValue, itemIndex) => setSelectedUnit(itemValue)}
-        >
-          {items}
-        </Picker>
+        <AppText style={[styles.modalText]}>Unit : </AppText>
+        <View style={styles.picker}>
+          <Picker
+            style={{
+              width: 200,
+              height: 44,
+            }}
+            itemStyle={{ height: 44 }}
+            selectedValue={selectedUnit}
+            onValueChange={(itemValue, itemIndex) => setSelectedUnit(itemValue)}
+          >
+            {unitItems}
+          </Picker>
+        </View>
 
         <AppButton title="Save" onPress={() => submitRequest()} />
         <AppButton
@@ -172,6 +177,15 @@ const styles = StyleSheet.create({
   counterValue: {
     paddingVertical: 5,
     paddingHorizontal: 15,
+    marginHorizontal: 10,
     fontSize: 18,
+    borderWidth: 2,
+    borderColor: "#003f88",
+    borderRadius: 20,
+  },
+  picker: {
+    borderWidth: 2,
+    borderColor: "#003f88",
+    borderRadius: 20,
   },
 });
